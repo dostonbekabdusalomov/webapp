@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Shop</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+<h2>🛒 Mahsulotlar</h2>
+<h2>🛒 Mahsulotlar</h2>
+
+<button onclick="buy()">Sotib olish</button>
+
+<script>
+  const tg = window.Telegram.WebApp;
+
+  tg.expand();
+
+  function buy() {
+    tg.sendData(JSON.stringify({
+      action: "buy",
+      product: "AK-47 Skin"
+    }));
+  }
+</script>
+
+</body>
+</html>
