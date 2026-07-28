@@ -6,9 +6,7 @@
     <title>Shop</title>
 
     <!-- Telegram WebApp -->
-    <script src="https://telegram.org/js/telegram-web-app.js">
-      const res = await fetch("https://webapp-backend-vi0i.onrender.com/products");
-    </script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <!-- Style -->
     <style>
@@ -93,25 +91,22 @@
       const tg = window.Telegram.WebApp
       tg.expand()
 
-      // 🔥 TEST PRODUCTS (keyin backenddan olamiz)
-      const products = [
-        {
-          id: 1,
-          name: 'AK-47 Skin',
-          price: 10000,
-          image: 'https://i.imgur.com/8Km9tLL.jpg'
-        },
-        {
-          id: 2,
-          name: 'AWP Dragon',
-          price: 25000,
-          image: 'https://i.imgur.com/Z8l4Krb.jpg'
-        }
-      ]
+      const API_URL = 'https://web-app-back-rbk3.onrender.com'
 
       const container = document.getElementById('products')
 
-      function render() {
+      async function loadProducts() {
+        try {
+          const res = await fetch(`${API_URL}/products`)
+          const products = await res.json()
+
+          render(products)
+        } catch (err) {
+          console.error('Xatolik:', err)
+        }
+      }
+
+      function render(products) {
         container.innerHTML = ''
 
         products.forEach(p => {
@@ -119,32 +114,28 @@
           card.className = 'card'
 
           card.innerHTML = `
-        <img src="${p.image}">
-        <div class="card-body">
-          <div class="name">${p.name}</div>
-          <div class="price">${p.price} so'm</div>
-          <button class="btn" onclick="buy(${p.id})">Sotib olish</button>
-        </div>
-      `
+              <img src="${p.image}">
+              <div class="card-body">
+                <div class="name">${p.name}</div>
+                <div class="price">${p.price} so'm</div>
+                <button class="btn" onclick="buy('${p._id}')">Sotib olish</button>
+              </div>
+            `
 
           container.appendChild(card)
         })
       }
 
       function buy(id) {
-        const product = products.find(p => p.id === id)
-
         tg.sendData(
           JSON.stringify({
             action: 'buy',
-            id: product.id,
-            name: product.name,
-            price: product.price
+            id: id
           })
         )
       }
 
-      render()
+      loadProducts()
     </script>
   </body>
 </html>
